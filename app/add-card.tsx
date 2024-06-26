@@ -19,7 +19,7 @@ interface InputProps {
 const Input: React.FC<InputProps> = ({ label, placeholder, className }) => {
   return (
     <View className={cn("gap-3", className)}>
-      <Text className='text-lg font-semibold'>{label}</Text>
+      <Text className='text-lg font-semibold tracking-wide'>{label}</Text>
       <TextInput
         className='rounded-lg border-2 border-slate-200 p-5'
         placeholder={placeholder}
@@ -73,7 +73,7 @@ const AddCardButton: React.FC = () => {
   return (
     <TouchableWithoutFeedback onPress={handlePressIn}>
       <Animated.View
-        className='bg-[#4AD8DA] h-16 rounded-[30px] items-center justify-center'
+        className='bg-[#4AD8DA] h-14 rounded-[30px] items-center justify-center'
         style={{
           transform: [{ scale }],
         }}>
