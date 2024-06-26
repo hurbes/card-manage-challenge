@@ -1,13 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Text,
-  View,
-  TextInput,
-  Image,
-  Animated,
-  TouchableWithoutFeedback,
-  Easing,
-} from "react-native";
+import { Text, View } from "react-native";
 import {
   useForm,
   SubmitHandler,
@@ -17,9 +9,6 @@ import {
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { SecureIcons } from "@/components/secure-icons";
-
-import { cn } from "@/utils/utils";
 import { CardFormValues, CardType, cardSchema } from "@/utils/card-schema";
 import {
   extractCreditCardData,
@@ -27,6 +16,10 @@ import {
   getFormattedValue,
   getMaxLength,
 } from "@/utils/card-formatter";
+
+import { Button } from "@/components/button";
+import { SecureIcons } from "@/components/secure-icons";
+import { InputField } from "@/components/input-field";
 
 interface InputProps {
   label: string;
@@ -56,8 +49,7 @@ const Input: React.FC<InputProps> = ({
   const maxLength = useMemo(() => getMaxLength(name, card), [name, card]);
 
   return (
-    <View className={cn("gap-3", className)}>
-      <Text className='text-lg font-semibold tracking-wide'>{label}</Text>
+    <>
       <Controller
         control={control}
         name={name}
@@ -66,30 +58,27 @@ const Input: React.FC<InputProps> = ({
           const formattedValue = getFormattedValue(name, displayValue, card);
 
           return (
-            <View
-              className={cn(
-                "rounded-lg border-2 py-5 px-3 flex-row justify-between",
-                error ? "border-red-500" : "border-slate-200"
-              )}>
-              <TextInput
-                placeholder={placeholder}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={formattedValue}
-                maxLength={maxLength}
-                inputMode='numeric'
-                keyboardType='numeric'
-                className='flex-1 font-semibold tracking-wide'
-              />
-              {name === "cardNumber" && card ? (
-                <Text className='ml-2 text-lg font-semibold'>{card.type}</Text>
-              ) : null}
-            </View>
+            <InputField
+              label={label}
+              placeholder={placeholder}
+              error={error}
+              onBlur={onBlur}
+              onChange={onChange}
+              formattedValue={formattedValue}
+              maxLength={maxLength}
+              className={className}
+              suffix={
+                name === "cardNumber" && card ? (
+                  <Text className='ml-2 text-lg font-semibold'>
+                    {card.type}
+                  </Text>
+                ) : null
+              }
+            />
           );
         }}
       />
-      {error && <Text className='text-red-500 text-sm'>{error}</Text>}
-    </View>
+    </>
   );
 };
 
@@ -126,7 +115,7 @@ const AddCard: React.FC = () => {
   return (
     <View className='flex-1 bg-white px-7 py-10 justify-between'>
       <CardForm control={control} errors={errors} card={cardType} />
-      <AddCardButton handleSubmit={handleSubmit(onSubmit)} />
+      <Button onPress={handleSubmit(onSubmit)} />
     </View>
   );
 };
@@ -170,41 +159,6 @@ const CardForm: React.FC<CardFormProps> = ({ control, errors, card }) => {
       </View>
       <SecureIcons />
     </View>
-  );
-};
-
-const AddCardButton: React.FC<{ handleSubmit: () => void }> = ({
-  handleSubmit,
-}) => {
-  const [scale] = useState(new Animated.Value(1));
-
-  const handlePressIn = () => {
-    Animated.timing(scale, {
-      toValue: 0.95,
-      duration: 100,
-      easing: Easing.linear,
-      useNativeDriver: true,
-    }).start(() => {
-      Animated.timing(scale, {
-        toValue: 1,
-        duration: 100,
-        easing: Easing.linear,
-        useNativeDriver: true,
-      }).start();
-    });
-  };
-
-  return (
-    <TouchableWithoutFeedback onPress={handlePressIn}>
-      <Animated.View
-        className='bg-[#4AD8DA] h-14 rounded-[30px] items-center justify-center'
-        style={{
-          transform: [{ scale }],
-        }}
-        onTouchEnd={handleSubmit}>
-        <Text className='font-bold text-xl text-white'>Add Card</Text>
-      </Animated.View>
-    </TouchableWithoutFeedback>
   );
 };
 
