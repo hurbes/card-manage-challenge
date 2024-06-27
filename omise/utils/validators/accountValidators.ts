@@ -1,26 +1,26 @@
 import { z } from "zod";
 
 const accountSchema = z.object({
+  id: z.string(),
+  object: z.literal("account"),
   api_version: z.string(),
   auto_activate_recipients: z.boolean(),
   chain_enabled: z.boolean(),
-  chain_return_uri: z.nullable(z.string()),
+  chain_return_uri: z.string().nullable(),
   chaining_allowed: z.boolean(),
   country: z.string(),
   created_at: z.string(),
   currency: z.string(),
-  email: z.string().email(),
-  id: z.string(),
+  email: z.string(),
   last_updated_api_version: z.string(),
   livemode: z.boolean(),
   location: z.string(),
   metadata_export_keys: z.object({
-    charge: z.array(z.unknown()),
-    transfer: z.array(z.unknown()),
-    refund: z.array(z.unknown()),
-    dispute: z.array(z.unknown()),
+    charge: z.array(z.string()),
+    transfer: z.array(z.string()),
+    refund: z.array(z.string()),
+    dispute: z.array(z.string()),
   }),
-  object: z.string(),
   supported_currencies: z.array(z.string()),
   team: z.string(),
   transfer_config: z.object({
@@ -29,19 +29,35 @@ const accountSchema = z.object({
     same_bank_max_transfer_amount: z.string(),
     is_payout_enabled: z.boolean(),
     fee: z.string(),
-    provider: z.nullable(z.string()),
-    merchant_id: z.nullable(z.string()),
+    provider: z.string().nullable(),
+    merchant_id: z.string().nullable(),
   }),
-  webhook_uri: z.string().url(),
+  webhook_uri: z.string(),
   zero_interest_installments: z.boolean(),
 });
 
 const accountParams = z.object({
-  email: z.string().email().optional(),
-  chain_return_uri: z.string().nullable().optional(),
-  metadata: z.object({}).optional(), // Metadata fields can be added as per specific requirements
-  webhook_uri: z.string().url().optional(),
-  zero_interest_installments: z.boolean().optional(),
+  email: z.string().optional(),
+  webhook_uri: z.string().optional(),
+  transfer_config: z
+    .object({
+      min_transfer_amount: z.string().optional(),
+      max_transfer_amount: z.string().optional(),
+      same_bank_max_transfer_amount: z.string().optional(),
+      is_payout_enabled: z.boolean().optional(),
+      fee: z.string().optional(),
+      provider: z.string().nullable().optional(),
+      merchant_id: z.string().nullable().optional(),
+    })
+    .optional(),
+  metadata_export_keys: z
+    .object({
+      charge: z.array(z.string()).optional(),
+      transfer: z.array(z.string()).optional(),
+      refund: z.array(z.string()).optional(),
+      dispute: z.array(z.string()).optional(),
+    })
+    .optional(),
 });
 
 // Export the type inferred from the schema

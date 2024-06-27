@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// Create Token Request Schema
 const createTokenRequestSchema = z.object({
   card: z
     .object({
@@ -20,6 +21,7 @@ const createTokenRequestSchema = z.object({
     .optional(),
 });
 
+// Token Response Schema
 const tokenResponseSchema = z.object({
   id: z.string(),
   object: z.literal("token"),
@@ -32,15 +34,15 @@ const tokenResponseSchema = z.object({
       object: z.literal("card"),
       livemode: z.boolean(),
       country: z.string(),
-      city: z.string().optional(),
-      postal_code: z.string().optional(),
+      city: z.string().nullable(),
+      postal_code: z.string().nullable(),
       financing: z.string(),
       last_digits: z.string(),
       brand: z.string(),
       expiration_month: z.number(),
       expiration_year: z.number(),
       fingerprint: z.string(),
-      name: z.string().optional(),
+      name: z.string().nullable(),
       security_code_check: z.boolean(),
       created: z.string(),
     })
@@ -62,7 +64,6 @@ const tokenResponseSchema = z.object({
 });
 
 type TokenResponse = z.infer<typeof tokenResponseSchema>;
-
 type CreateTokenRequest = z.infer<typeof createTokenRequestSchema>;
 
 export { createTokenRequestSchema, tokenResponseSchema };

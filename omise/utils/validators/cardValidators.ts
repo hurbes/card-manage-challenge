@@ -1,5 +1,3 @@
-// src/utils/validators/cardValidators.ts
-
 import { z } from "zod";
 
 // Common Card Schema
@@ -19,13 +17,8 @@ const cardSchema = z.object({
   expiration_year: z.number(),
   fingerprint: z.string(),
   name: z.string().nullable(),
-  security_code_check: z.boolean(),
-  created_at: z.string(),
+  created: z.string(), // confirmed to be string as it's a timestamp
 });
-
-// Retrieve a Card
-// Request Parameters: customer_id (string), card_id (string)
-// Response: Use CardSchema
 
 // List All Cards
 const cardListSchema = z.object({

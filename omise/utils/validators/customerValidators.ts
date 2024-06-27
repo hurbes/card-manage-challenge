@@ -5,7 +5,7 @@ const createCustomerRequestSchema = z.object({
   email: z.string().email(),
   description: z.string().optional(),
   card: z.string().optional(),
-  metadata: z.record(z.string()).optional(),
+  metadata: z.record(z.string(), z.string()).optional(),
 });
 
 const createCustomerResponseSchema = z.object({
@@ -15,7 +15,7 @@ const createCustomerResponseSchema = z.object({
   description: z.string().nullable(),
   card: z.string().nullable(),
   created: z.number(),
-  metadata: z.record(z.string()).nullable(),
+  metadata: z.record(z.string(), z.string()).nullable(),
   livemode: z.boolean(),
   location: z.string(),
 });
@@ -28,7 +28,7 @@ const updateCustomerRequestSchema = z.object({
   email: z.string().email().optional(),
   description: z.string().optional(),
   card: z.string().optional(),
-  metadata: z.record(z.string()).optional(),
+  metadata: z.record(z.string(), z.string()).optional(),
 });
 
 const updateCustomerResponseSchema = createCustomerResponseSchema;
@@ -43,6 +43,10 @@ const deleteCustomerResponseSchema = z.object({
 const listCustomersResponseSchema = z.object({
   object: z.literal("list"),
   data: z.array(createCustomerResponseSchema),
+  total: z.number(),
+  limit: z.number(),
+  offset: z.number(),
+  location: z.string(),
 });
 
 type CreateCustomerRequest = z.infer<typeof createCustomerRequestSchema>;

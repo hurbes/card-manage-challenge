@@ -26,13 +26,13 @@ const chargeSchema = z.object({
     .nullable(),
   customer: z.string().nullable(),
   created_at: z.string(),
-  metadata: z.record(z.string()).optional(),
+  metadata: z.record(z.string(), z.string()).optional(),
 });
 
 const chargeListSchema = z.object({
-  object: z.string(),
-  from: z.string(),
-  to: z.string(),
+  object: z.literal("list"),
+  from: z.string().nullable(),
+  to: z.string().nullable(),
   offset: z.number(),
   limit: z.number(),
   total: z.number(),
@@ -45,10 +45,10 @@ const createChargeRequestSchema = z.object({
   currency: z.string(),
   customer: z.string().optional(),
   card: z.string().optional(),
-  source: z.string().optional(),
   description: z.string().optional(),
+  metadata: z.record(z.string(), z.string()).optional(),
   capture: z.boolean().optional(),
-  metadata: z.record(z.string()).optional(),
+  return_uri: z.string().optional(),
 });
 
 const createChargeResponseSchema = chargeSchema;
@@ -65,7 +65,7 @@ const retrieveChargeParamsSchema = z.object({
 
 const reverseChargeRequestSchema = z.object({
   amount: z.number().optional(),
-  metadata: z.record(z.string()).optional(),
+  metadata: z.record(z.string(), z.string()).optional(),
 });
 
 // Reverse (Refund) a Charge
