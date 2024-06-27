@@ -47,7 +47,7 @@ const Input: React.FC<InputProps> = ({
   card,
 }) => {
   const maxLength = useMemo(() => getMaxLength(name, card), [name, card]);
-
+  const showSuffix = useMemo(() => name === "cardNumber" && card, [name, card]);
   return (
     <>
       <Controller
@@ -68,9 +68,9 @@ const Input: React.FC<InputProps> = ({
               maxLength={maxLength}
               className={className}
               suffix={
-                name === "cardNumber" && card ? (
+                showSuffix ? (
                   <Text className='ml-2 text-lg font-semibold'>
-                    {card.type}
+                    {card!.type}
                   </Text>
                 ) : null
               }
