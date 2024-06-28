@@ -1,12 +1,16 @@
 import { useCreateToken } from "@/omise/hooks/useTokens";
-import { cardFormSchema, CardFormValues, CardType } from "@/utils/card-schema";
+import {
+  cardFormSchema,
+  CardFormValues,
+  CardType,
+} from "@/utils/cardFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import { Control, FieldErrors, SubmitHandler, useForm } from "react-hook-form";
 import { useSafeStorage } from "./useSafeStorage";
 import { useUpdateCustomer } from "@/omise/hooks/useCustomer";
 import { useEffect, useState } from "react";
-import { extractCreditCardData } from "@/utils/card-formatter";
+import { extractCreditCardData } from "@/utils/cardFormatter";
 
 interface UseAddCardReturn {
   control: Control<CardFormValues>;

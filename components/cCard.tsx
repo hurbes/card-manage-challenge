@@ -10,7 +10,7 @@ import {
 import { CardResponse } from "@/omise/utils/validators/cardValidators";
 import { getCardImage } from "@/utils/utils";
 import { useCreateCharge } from "@/omise/hooks/useCharge";
-import { formatReadableExpirationDate } from "@/utils/card-formatter";
+import { formatReadableExpirationDate } from "@/utils/cardFormatter";
 
 interface CardDetailsProps {
   name: string;

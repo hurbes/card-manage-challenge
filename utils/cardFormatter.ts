@@ -1,5 +1,5 @@
 import pick from "lodash.pick";
-import { CardFormValues, cardFormSchema, CardType } from "./card-schema";
+import { CardFormValues, cardFormSchema, CardType } from "./cardFormSchema";
 import { Card, cardSchema } from "@/omise/utils/validators/tokenValidators";
 
 type Value = string | { value: string };

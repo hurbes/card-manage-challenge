@@ -2,12 +2,12 @@ import React, { useMemo } from "react";
 import { Image, View } from "react-native";
 import { Controller, Control, FieldErrors } from "react-hook-form";
 
-import { CardFormValues, CardType } from "@/utils/card-schema";
+import { CardFormValues, CardType } from "@/utils/cardFormSchema";
 import {
   extractStringValue,
   getFormattedValue,
   getMaxLength,
-} from "@/utils/card-formatter";
+} from "@/utils/cardFormatter";
 
 import { Button } from "@/components/button";
 import { SecureIcons } from "@/components/secureIcons";
