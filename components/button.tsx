@@ -1,6 +1,12 @@
 import { cn } from "@/utils/utils";
 import { useState } from "react";
-import { Animated, Easing, TouchableWithoutFeedback, Text } from "react-native";
+import {
+  Animated,
+  Easing,
+  TouchableWithoutFeedback,
+  Text,
+  ActivityIndicator,
+} from "react-native";
 
 interface ButtonProps {
   onPress: () => void;
@@ -44,9 +50,13 @@ const Button: React.FC<ButtonProps> = ({
           transform: [{ scale }],
         }}
         onTouchEnd={onPress}>
-        <Text className={cn("font-bold text-xl text-white", titleClass)}>
-          Add Card
-        </Text>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text className={cn("font-bold text-xl text-white", titleClass)}>
+            Add Card
+          </Text>
+        )}
       </Animated.View>
     </TouchableWithoutFeedback>
   );

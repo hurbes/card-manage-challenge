@@ -10,8 +10,10 @@ interface InputFieldProps {
   onChange: (text: string) => void;
   formattedValue: string;
   maxLength: number | undefined;
-  suffix?: React.ReactNode;
+  suffix?: () => React.ReactNode;
   className?: string;
+  inputType?: "text" | "numeric";
+  returnKeyType?: "done" | "next";
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -24,6 +26,8 @@ const InputField: React.FC<InputFieldProps> = ({
   maxLength,
   suffix,
   className,
+  inputType = "text",
+  returnKeyType = "next",
 }) => {
   return (
     <View className={cn("gap-3", className)}>
@@ -39,11 +43,12 @@ const InputField: React.FC<InputFieldProps> = ({
           onChangeText={onChange}
           value={formattedValue}
           maxLength={maxLength}
-          inputMode='numeric'
-          keyboardType='numeric'
-          className='flex-1 font-semibold tracking-wide'
+          inputMode={inputType}
+          returnKeyType={returnKeyType}
+          placeholderTextColor={"#A0AEC0"}
+          className='flex-1 font-semibold tracking-wide w-full text-gray-800'
         />
-        {suffix ? suffix : null}
+        {suffix ? suffix() : null}
       </View>
       {error && <Text className='text-red-500 text-sm'>{error}</Text>}
     </View>
