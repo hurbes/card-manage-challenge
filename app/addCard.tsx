@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { Image, View } from "react-native";
 import { Controller, Control, FieldErrors } from "react-hook-form";
-
+import { StatusBar } from "expo-status-bar";
 import { CardFormValues, CardType } from "@/utils/cardFormSchema";
 import {
   extractStringValue,
@@ -91,6 +91,7 @@ const AddCard: React.FC = () => {
 
   return (
     <View className='flex-1 bg-white px-7 py-10 justify-between'>
+      <StatusBar style='light' />
       <CardForm control={control} errors={errors} card={cardType} />
       <Button loading={isPending} onPress={onSubmit} />
     </View>
