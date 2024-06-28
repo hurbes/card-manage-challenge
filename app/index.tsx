@@ -6,7 +6,7 @@ import { useSafeStorage } from "@/hooks/useSafeStorage";
 import { useCreateCustomer } from "@/omise/hooks/useCustomer";
 import { FullPageLoader } from "@/components/fullPageloader";
 import { useFetchAllCards } from "@/omise/hooks/useCard";
-import { CCard } from "@/components/cCard";
+import { CCard } from "@/components/ccard";
 
 const Page: React.FC = () => {
   const { isLoading, data, saveValue } = useSafeStorage<string | null>(
