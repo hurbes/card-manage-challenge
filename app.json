@@ -29,11 +29,7 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
-      ["expo-asset",{
-        "assets": ["./assets/animations/card.json"]
-      }]
-    ],
+      "expo-router", "expo-asset", "expo-secure-store" ],
     "experiments": {
       "typedRoutes": true
     }
