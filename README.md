@@ -1,50 +1,60 @@
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+---
 
-## Get started
+# React Native Omise Payment App
 
-1. Install dependencies
+Hey there! Welcome to my React Native Omise Payment App, where managing payments and cards is as straightforward as can be. This app allows users like you to securely add and manage your credit/debit cards, view card details, and make payments using the Omise payment gateway.
 
-   ```bash
-   npm install
-   ```
+## Features
 
-2. Start the app
+- **Add a Card**: Easily add your cards using a simple and secure form. I've implemented strict validation powered by Zod to ensure your data is always safe and correctly formatted.
+  
+- **View Cards**: Once added, your cards are neatly listed with the last four digits visible for quick identification. No more guessing which card is which!
 
-   ```bash
-    npx expo start
-   ```
+- **Make Payments**: Ready to pay? Simply select a card and pay a randomly generated amount with confidence. Axios handles all communication with the Omise API, ensuring your transactions are swift and secure.
 
-In the output, you'll find options to open the app in a
+## Why Zod for Validation?
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+I chose Zod because it ensures that only valid card and payment data enters my app, keeping my codebase clean and reliable.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Why Axios for API Calls?
 
-## Get a fresh project
+Axios is my go-to for handling API requests because it's straightforward and gets the job done right. Whether I'm fetching card details or processing payments through the Omise API, Axios's robust features ensure my app communicates with the backend seamlessly.
 
-When you're ready, run:
+## State Management with React Query
 
-```bash
-npm run reset-project
-```
+Managing app-wide state and data fetching is where React Query shines. It helps my app stay responsive and up-to-date with real-time updates, simplifying caching and ensuring efficient data management.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Integration with Latest Omise APIs
 
-## Learn more
+I've integrated the latest Omise APIs as per their documentation, ensuring I leverage the newest features and improvements for secure and reliable payment processing.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Abstraction and Wrapper Benefits
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+To streamline development and enhance maintainability, I've used abstraction layers and wrappers around critical functionalities like API interactions and state management. This approach allows me to encapsulate complex logic into reusable components, reducing code duplication and making future updates or modifications easier.
 
-## Join the community
+## Design Philosophy
 
-Join our community of developers creating universal apps.
+My app's design focuses on usability. I've crafted reusable UI components using NativeWind (Tailwind CSS for React Native), ensuring a consistent and responsive experience across different devices. The design is based on the provided Figma file, focusing on user-friendly interactions and intuitive navigation.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Improvements and Lessons Learned
+
+### Improvement Scope
+
+- **Codebase Cleanup**: I'm continuously refining my codebase to ensure it's clean and maintainable. I'll consolidate redundant logic, refactor components for clarity, and ensure my TypeScript types are accurate.
+
+### Mistake
+
+- **Accidental API Key Commit**: Oops, I had a slip-up and accidentally committed my API keys. I've promptly revoked them and tightened my security measures to prevent any future mishaps. Security is my top priority, and I'm committed to safeguarding your data.
+
+## Built on Expo
+
+This app is built using Expo, making development and deployment easier and more streamlined. It supports Expo Go for quick testing on real devices during development.
+
+---
+
+### Screenshots
+<p float="left">
+<img src="screenshots/1.png" alt="drawing" width="200"/>
+<img src="screenshots/2.png" alt="drawing" width="200"/>
+</p>
