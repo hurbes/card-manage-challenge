@@ -1,7 +1,6 @@
 import { z } from "zod";
-
 // Common Card Schema
-const cardSchema = z.object({
+const customerCardSchema = z.object({
   id: z.string(),
   object: z.literal("card"),
   livemode: z.boolean(),
@@ -16,11 +15,19 @@ const cardSchema = z.object({
   expiration_month: z.number(),
   expiration_year: z.number(),
   fingerprint: z.string(),
-  name: z.string().nullable(),
-  created: z.string(), // confirmed to be string as it's a timestamp
+  name: z.string(),
+  security_code_check: z.boolean().optional(),
+  created_at: z.string(), // corrected to match the API response
+  deleted: z.boolean(), // added
+  street1: z.string().nullable(), // added
+  street2: z.string().nullable(), // added
+  state: z.string().nullable(), // added
+  phone_number: z.string().nullable(), // added
+  first_digits: z.string().nullable(), // added
+  tokenization_method: z.string().nullable(), // added
 });
 
-// List All Cards
+// List All Cards Schema
 const cardListSchema = z.object({
   object: z.literal("list"),
   from: z.string().nullable(),
@@ -28,14 +35,10 @@ const cardListSchema = z.object({
   offset: z.number(),
   limit: z.number(),
   total: z.number(),
-  data: z.array(cardSchema),
+  data: z.array(customerCardSchema),
+  location: z.string(),
+  order: z.string(),
 });
-
-// Create a Card
-const createCardRequestSchema = z.object({
-  card: z.string(),
-});
-
 // Update a Card
 const updateCardRequestSchema = z.object({
   name: z.string().nullable(),
@@ -52,15 +55,13 @@ const deleteCardResponseSchema = z.object({
 });
 
 type DeleteCardResponse = z.infer<typeof deleteCardResponseSchema>;
-type CardResponse = z.infer<typeof cardSchema>;
+type CardResponse = z.infer<typeof customerCardSchema>;
 type UpdateCardRequest = z.infer<typeof updateCardRequestSchema>;
-type CreateCardRequest = z.infer<typeof createCardRequestSchema>;
 type CardListResponse = z.infer<typeof cardListSchema>;
 
 export {
-  cardSchema,
+  customerCardSchema,
   cardListSchema,
-  createCardRequestSchema,
   updateCardRequestSchema,
   deleteCardResponseSchema,
 };
@@ -68,7 +69,6 @@ export {
 export type {
   CardResponse,
   UpdateCardRequest,
-  CreateCardRequest,
   CardListResponse,
   DeleteCardResponse,
 };

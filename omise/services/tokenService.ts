@@ -4,7 +4,7 @@ import {
   createTokenRequestSchema,
   tokenResponseSchema,
 } from "../utils/validators/tokenValidators";
-import { BASE_URL } from "../constants/constants";
+import { VAULT_URL } from "../constants/constants";
 import { handleResponse } from "../utils/responseHandler";
 
 export const createToken = async ({
@@ -15,7 +15,8 @@ export const createToken = async ({
   ReturnType<typeof tokenResponseSchema.parse>
 > => {
   const response = await axios.post("/tokens", data, {
-    baseURL: BASE_URL,
+    usePublicKey: true,
+    baseURL: VAULT_URL,
     signal,
   });
 
@@ -28,7 +29,8 @@ export const retrieveToken = async (
 ): Promise<ReturnType<typeof tokenResponseSchema.parse>> => {
   const { tokenId } = params;
   const response = await axios.get(`/tokens/${tokenId}`, {
-    baseURL: BASE_URL,
+    baseURL: VAULT_URL,
+    usePublicKey: true,
     signal,
   });
 

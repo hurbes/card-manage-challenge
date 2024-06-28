@@ -19,11 +19,10 @@ import {
 export const createCharge = async ({
   axios,
   data,
-  signal,
 }: APIInput<CreateChargeRequest>): Promise<
   ReturnType<typeof createChargeResponseSchema.parse>
 > => {
-  const response = await axios.post("/charges", data, { signal });
+  const response = await axios.post("/charges", data, { baseURL: BASE_URL });
   return handleResponse(response, createChargeResponseSchema);
 };
 

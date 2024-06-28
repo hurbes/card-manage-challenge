@@ -43,8 +43,8 @@ const chargeListSchema = z.object({
 const createChargeRequestSchema = z.object({
   amount: z.number(),
   currency: z.string(),
-  customer: z.string().optional(),
-  card: z.string().optional(),
+  customer: z.string(),
+  card: z.string(),
   description: z.string().optional(),
   metadata: z.record(z.string(), z.string()).optional(),
   capture: z.boolean().optional(),

@@ -29,21 +29,19 @@ import {
   useQueryWrapper,
 } from "../utils/queryWrapper";
 
-export function useCreateCustomer(
-  data: CreateCustomerRequest
-): OmiseMutationResult<
+export function useCreateCustomer(): OmiseMutationResult<
   ReturnType<typeof createCustomerResponseSchema.parse>,
   BaseError,
   { data: CreateCustomerRequest }
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useMutationWrapper<
     ReturnType<typeof createCustomerResponseSchema.parse>,
     BaseError,
     { data: CreateCustomerRequest }
   >({
-    mutationFn: async () => {
+    mutationFn: async ({ data }) => {
       const response = await createCustomer({ axios, data });
       return createCustomerResponseSchema.parse(response);
     },
@@ -56,7 +54,7 @@ export function useRetrieveCustomer(
   ReturnType<typeof retrieveCustomerResponseSchema.parse>,
   BaseError
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useQueryWrapper<
     ReturnType<typeof retrieveCustomerResponseSchema.parse>,
@@ -75,21 +73,20 @@ export function useRetrieveCustomer(
 }
 
 export function useUpdateCustomer(
-  customerId: string,
-  data: UpdateCustomerRequest
+  customerId: string
 ): OmiseMutationResult<
   ReturnType<typeof updateCustomerResponseSchema.parse>,
   BaseError,
   { data: UpdateCustomerRequest }
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useMutationWrapper<
     ReturnType<typeof updateCustomerResponseSchema.parse>,
     BaseError,
     { data: UpdateCustomerRequest }
   >({
-    mutationFn: async () => {
+    mutationFn: async ({ data }) => {
       const response = await updateCustomer({
         axios,
         data: { ...data, customerId },
@@ -99,24 +96,22 @@ export function useUpdateCustomer(
   });
 }
 
-export function useDeleteCustomer(
-  customerId: string
-): OmiseMutationResult<
+export function useDeleteCustomer(): OmiseMutationResult<
   ReturnType<typeof deleteCustomerResponseSchema.parse>,
   BaseError,
   { data: { customerId: string } }
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useMutationWrapper<
     ReturnType<typeof deleteCustomerResponseSchema.parse>,
     BaseError,
     { data: { customerId: string } }
   >({
-    mutationFn: async () => {
+    mutationFn: async ({ data }) => {
       const response = await deleteCustomer({
         axios,
-        data: { customerId },
+        data: data,
       });
       return deleteCustomerResponseSchema.parse(response);
     },
@@ -127,7 +122,7 @@ export function useListCustomers(): OmiseResult<
   ReturnType<typeof listCustomersResponseSchema.parse>,
   BaseError
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useQueryWrapper<
     ReturnType<typeof listCustomersResponseSchema.parse>,

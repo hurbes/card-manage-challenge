@@ -24,21 +24,19 @@ import {
 import { useMutationWrapper, useQueryWrapper } from "../utils/queryWrapper";
 import type { OmiseMutationResult, OmiseResult } from "../utils/queryWrapper";
 
-export function useCreateCharge(
-  data: CreateChargeRequest
-): OmiseMutationResult<
+export function useCreateCharge(): OmiseMutationResult<
   ReturnType<typeof createChargeResponseSchema.parse>,
   BaseError,
   { data: CreateChargeRequest }
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useMutationWrapper<
     ReturnType<typeof createChargeResponseSchema.parse>,
     BaseError,
     { data: CreateChargeRequest }
   >({
-    mutationFn: async () => {
+    mutationFn: async ({ data }) => {
       const response = await createCharge({ axios, data });
       return createChargeResponseSchema.parse(response);
     },
@@ -51,7 +49,7 @@ export function useRetrieveCharge(
   ReturnType<typeof retrieveChargeResponseSchema.parse>,
   BaseError
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useQueryWrapper<
     ReturnType<typeof retrieveChargeResponseSchema.parse>,
@@ -69,24 +67,22 @@ export function useRetrieveCharge(
   });
 }
 
-export function useCaptureCharge(
-  chargeId: string
-): OmiseMutationResult<
+export function useCaptureCharge(): OmiseMutationResult<
   ReturnType<typeof captureChargeResponseSchema.parse>,
   BaseError,
   { data: { chargeId: string } }
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useMutationWrapper<
     ReturnType<typeof captureChargeResponseSchema.parse>,
     BaseError,
     { data: { chargeId: string } }
   >({
-    mutationFn: async () => {
+    mutationFn: async ({ data }) => {
       const response = await captureCharge({
         axios,
-        data: { chargeId },
+        data: data,
       });
       return captureChargeResponseSchema.parse(response);
     },
@@ -99,7 +95,7 @@ export function useListAllCharges(
   ReturnType<typeof listAllChargesResponseSchema.parse>,
   BaseError
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useQueryWrapper<
     ReturnType<typeof listAllChargesResponseSchema.parse>,

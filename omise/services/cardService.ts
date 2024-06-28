@@ -2,7 +2,6 @@ import { APIInput } from "../types/api";
 import { cardListSchema, cardSchema } from "../utils/validators/cardValidators";
 import { handleResponse } from "../utils/responseHandler";
 import {
-  CreateCardRequest,
   deleteCardResponseSchema,
   UpdateCardRequest,
 } from "../utils/validators/cardValidators";
@@ -31,18 +30,6 @@ export const fetchAllCards = async (
   });
 
   return handleResponse(response, cardListSchema);
-};
-
-export const createCard = async (
-  { axios, data, signal }: APIInput<CreateCardRequest>,
-  customerId: string
-): Promise<ReturnType<typeof cardSchema.parse>> => {
-  const response = await axios.post(`/customers/${customerId}/cards`, data, {
-    signal,
-    url: VAULT_URL,
-  });
-
-  return handleResponse(response, cardSchema);
 };
 
 export const updateCard = async (

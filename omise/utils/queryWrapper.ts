@@ -12,7 +12,7 @@ import {
 import { useMemo } from "react";
 import { isBaseError, BaseError } from "./errors/baseError";
 
-type OmiseMutationResult<TData, TError, TVariables> = UseMutationResult<
+type OmiseMutationResult<TData, TError, TVariables = {}> = UseMutationResult<
   TData,
   TError,
   TVariables

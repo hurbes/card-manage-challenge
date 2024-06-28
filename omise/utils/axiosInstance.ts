@@ -3,25 +3,16 @@ import { useOmiseConfig } from "../config";
 import base64 from "base-64";
 
 const instance = axios.create();
-export const useAxiosInstance = ({
-  usePublicKey = false,
-}: {
-  usePublicKey?: boolean;
-}): AxiosInstance => {
-  const { apiKey, secretKey, apiVersion, vaultApiVersion } = useOmiseConfig();
-
-  const key = usePublicKey ? apiKey : secretKey;
+export const useAxiosInstance = (): AxiosInstance => {
+  const { publicKey, secretKey, apiVersion } = useOmiseConfig();
 
   instance.interceptors.request.use(
-    (config) => {
-      if (config.headers) {
-        (config.headers["Authorization"] = "Basic " + base64.encode(key + ":")),
-          (config.headers["Omise-Version"] = apiVersion);
-        if (vaultApiVersion) {
-          config.headers["Vault-Version"] = vaultApiVersion;
-        }
-      }
-      console.log(config);
+    function (config) {
+      const key = config.usePublicKey ? publicKey : secretKey;
+
+      config.headers["Authorization"] = "Basic " + base64.encode(key + ":");
+      config.headers["Omise-Version"] = apiVersion;
+
       return config;
     },
     (error) => {

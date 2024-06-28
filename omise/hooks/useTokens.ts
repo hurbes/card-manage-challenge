@@ -8,21 +8,19 @@ import { tokenResponseSchema } from "../utils/validators/tokenValidators";
 import type { CreateTokenRequest } from "../utils/validators/tokenValidators";
 import type { OmiseMutationResult, OmiseResult } from "../utils/queryWrapper";
 
-export function useCreateToken(
-  data: CreateTokenRequest
-): OmiseMutationResult<
+export function useCreateToken(): OmiseMutationResult<
   ReturnType<typeof tokenResponseSchema.parse>,
   BaseError,
   { data: CreateTokenRequest }
 > {
-  const axios = useAxiosInstance({ usePublicKey: true });
+  const axios = useAxiosInstance();
 
   return useMutationWrapper<
     ReturnType<typeof tokenResponseSchema.parse>,
     BaseError,
     { data: CreateTokenRequest }
   >({
-    mutationFn: async () => {
+    mutationFn: async ({ data }) => {
       const response = await createToken({ axios, data });
       return tokenResponseSchema.parse(response);
     },
@@ -32,7 +30,7 @@ export function useCreateToken(
 export function useRetrieveToken(
   tokenId: string
 ): OmiseResult<ReturnType<typeof tokenResponseSchema.parse>, BaseError> {
-  const axios = useAxiosInstance({ usePublicKey: true });
+  const axios = useAxiosInstance();
 
   return useQueryWrapper<
     ReturnType<typeof tokenResponseSchema.parse>,

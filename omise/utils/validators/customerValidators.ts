@@ -2,51 +2,87 @@ import { z } from "zod";
 
 // Create a Customer
 const createCustomerRequestSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email().optional(),
   description: z.string().optional(),
   card: z.string().optional(),
-  metadata: z.record(z.string(), z.string()).optional(),
+  metadata: z.record(z.string()).optional(),
+  default_card: z.string().optional(),
 });
 
 const createCustomerResponseSchema = z.object({
   object: z.literal("customer"),
   id: z.string(),
-  email: z.string().email(),
-  description: z.string().nullable(),
-  card: z.string().nullable(),
-  created: z.number(),
-  metadata: z.record(z.string(), z.string()).nullable(),
   livemode: z.boolean(),
   location: z.string(),
+  deleted: z.boolean(),
+  metadata: z.record(z.string()).nullable(),
+  cards: z.object({
+    object: z.literal("list"),
+    data: z.array(
+      z.object({
+        id: z.string(),
+        object: z.literal("card"),
+        livemode: z.boolean(),
+        location: z.string(),
+        country: z.string(),
+        city: z.string().nullable(),
+        postal_code: z.string().nullable(),
+        financing: z.string(),
+        bank: z.string(),
+        last_digits: z.string(),
+        brand: z.string(),
+        expiration_month: z.number(),
+        expiration_year: z.number(),
+        fingerprint: z.string(),
+        name: z.string().nullable(),
+        created: z.string(),
+      })
+    ),
+    limit: z.number(),
+    offset: z.number(),
+    total: z.number(),
+    location: z.string(),
+    order: z.string(),
+    from: z.string(),
+    to: z.string(),
+  }),
+  default_card: z.string().nullable(),
+  linked_accounts: z.object({
+    object: z.literal("list"),
+    data: z.array(z.unknown()),
+    limit: z.number(),
+    offset: z.number(),
+    total: z.number(),
+    location: z.string(),
+    order: z.string(),
+    from: z.string(),
+    to: z.string(),
+  }),
+  description: z.string().nullable(),
+  email: z.string().email().nullable(),
+  created_at: z.string(),
 });
 
-// Retrieve a Customer
 const retrieveCustomerResponseSchema = createCustomerResponseSchema;
 
-// Update a Customer
 const updateCustomerRequestSchema = z.object({
   email: z.string().email().optional(),
   description: z.string().optional(),
   card: z.string().optional(),
-  metadata: z.record(z.string(), z.string()).optional(),
+  metadata: z.record(z.string()).optional(),
+  default_card: z.string().optional(),
 });
 
 const updateCustomerResponseSchema = createCustomerResponseSchema;
 
-// Delete a Customer
 const deleteCustomerResponseSchema = z.object({
   deleted: z.boolean(),
   id: z.string(),
 });
 
-// List all Customers
 const listCustomersResponseSchema = z.object({
   object: z.literal("list"),
   data: z.array(createCustomerResponseSchema),
-  total: z.number(),
-  limit: z.number(),
-  offset: z.number(),
-  location: z.string(),
 });
 
 type CreateCustomerRequest = z.infer<typeof createCustomerRequestSchema>;
@@ -66,6 +102,7 @@ export {
   deleteCustomerResponseSchema,
   listCustomersResponseSchema,
 };
+
 export type {
   CreateCustomerRequest,
   CreateCustomerResponse,

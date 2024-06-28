@@ -9,6 +9,7 @@ export const handleResponse = async <T>(
   response: AxiosResponse,
   schema: z.ZodSchema<T>
 ): Promise<T> => {
+  console.log("handleResponse", response);
   if (!response.status) {
     throw createNetworkError("Network error occurred");
   }

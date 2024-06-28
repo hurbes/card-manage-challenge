@@ -2,14 +2,12 @@ import { useAxiosInstance } from "../utils/axiosInstance";
 import {
   cardListSchema,
   cardSchema,
-  CreateCardRequest,
   deleteCardResponseSchema,
   UpdateCardRequest,
 } from "../utils/validators/cardValidators";
 import { BaseError } from "../utils/errors/baseError";
 import { useMutationWrapper, useQueryWrapper } from "../utils/queryWrapper";
 import {
-  createCard,
   deleteCard,
   fetchAllCards,
   fetchCard,
@@ -23,7 +21,7 @@ export function useFetchCard(
   customerId: string,
   cardId: string
 ): OmiseResult<ReturnType<typeof cardSchema.parse>, BaseError> {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
   const data = { customerId, cardId };
 
   return useQueryWrapper<ReturnType<typeof cardSchema.parse>, BaseError>({
@@ -39,7 +37,7 @@ export function useFetchCard(
 export function useFetchAllCards(
   customerId: string
 ): OmiseResult<ReturnType<typeof cardListSchema.parse>, BaseError> {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
   return useQueryWrapper<ReturnType<typeof cardListSchema.parse>, BaseError>({
     queryKey: ["cards", customerId],
     queryFn: async ({ signal }) => {
@@ -49,47 +47,23 @@ export function useFetchAllCards(
   });
 }
 
-// Create a new card
-export function useCreateCard(
-  customerId: string,
-  data: CreateCardRequest
-): OmiseMutationResult<
-  ReturnType<typeof cardSchema.parse>,
-  BaseError,
-  { data: CreateCardRequest }
-> {
-  const axios = useAxiosInstance({ usePublicKey: true });
-
-  return useMutationWrapper<
-    ReturnType<typeof cardSchema.parse>,
-    BaseError,
-    { data: CreateCardRequest }
-  >({
-    mutationFn: async () => {
-      const response = await createCard({ axios, data }, customerId);
-      return cardSchema.parse(response);
-    },
-  });
-}
-
 // Update an existing card
 export function useUpdateCard(
   customerId: string,
-  cardId: string,
-  data: UpdateCardRequest
+  cardId: string
 ): OmiseMutationResult<
   ReturnType<typeof cardSchema.parse>,
   BaseError,
   { data: UpdateCardRequest }
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useMutationWrapper<
     ReturnType<typeof cardSchema.parse>,
     BaseError,
     { data: UpdateCardRequest }
   >({
-    mutationFn: async () => {
+    mutationFn: async ({ data }) => {
       const params = { customerId, cardId };
       const response = await updateCard({ axios, data }, params);
       return cardSchema.parse(response);
@@ -106,7 +80,7 @@ export function useDeleteCard(
   BaseError,
   void
 > {
-  const axios = useAxiosInstance({ usePublicKey: false });
+  const axios = useAxiosInstance();
 
   return useMutationWrapper<
     ReturnType<typeof deleteCardResponseSchema.parse>,
