@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 import { CardResponse } from "@/omise/utils/validators/cardValidators";
 import { getCardImage } from "@/utils/utils";
 import { useCreateCharge } from "@/omise/hooks/useCharge";
+import { formatReadableExpirationDate } from "@/utils/card-formatter";
 
 interface CardDetailsProps {
   name: string;
@@ -28,18 +29,40 @@ const extractCustomerId = (url: string): string | null => {
 };
 
 const CCard: React.FC<{ card: CardResponse }> = ({ card }) => {
+  const exp = useMemo(() => {
+    return formatReadableExpirationDate({
+      expiration_month: card.expiration_month,
+      expiration_year: card.expiration_year,
+    });
+  }, [card.expiration_month, card.expiration_year]);
+
   const cardImage = useMemo(() => getCardImage(card.brand), [card.brand]);
   const { isError, isSuccess, isPending, mutate, error, data } =
     useCreateCharge();
 
-  if (isError) {
-    console.error(error);
-    alert(`Failed to create charge\n${error.message}`);
-  }
+  useEffect(() => {
+    if (isError) {
+      console.error(error);
+      alert(`Failed to create charge\n${error.message}`);
+    }
 
-  if (isSuccess) {
-    alert(`Charge created successfully with id: ${data.id}`);
-  }
+    if (isSuccess) {
+      alert(`Charge created successfully with id: ${data.id}`);
+    }
+  }, [isError, isSuccess, error, data]);
+
+  const handleCharge = useCallback(() => {
+    const customerId = extractCustomerId(card.location);
+    mutate({
+      data: {
+        amount: 20000,
+        currency: "thb",
+        card: card.id,
+        description: "Test Charge",
+        customer: customerId || "",
+      },
+    });
+  }, [mutate]);
 
   if (isPending) {
     return (
@@ -51,19 +74,6 @@ const CCard: React.FC<{ card: CardResponse }> = ({ card }) => {
     );
   }
 
-  const handleCharge = () => {
-    const customerId = extractCustomerId(card.location);
-    mutate({
-      data: {
-        amount: 20000,
-        currency: "thb",
-        card: card.id,
-        description: "Test Charge",
-        customer: customerId || "",
-      },
-    });
-  };
-
   return (
     <TouchableWithoutFeedback onPress={handleCharge}>
       <View
@@ -72,10 +82,7 @@ const CCard: React.FC<{ card: CardResponse }> = ({ card }) => {
         <Image source={cardImage} className='h-12 w-20 ' resizeMode='contain' />
         <View className='w-10/12'>
           <CardNumber number={card.last_digits} />
-          <CardDetails
-            name={card.name}
-            expiry={`${card.expiration_month}/${card.expiration_year}`}
-          />
+          <CardDetails name={card.name} expiry={exp} />
         </View>
       </View>
     </TouchableWithoutFeedback>

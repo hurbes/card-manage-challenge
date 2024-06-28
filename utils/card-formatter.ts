@@ -154,6 +154,18 @@ const extractCreditCardData = (data: CardFormValues): Card => {
   return parsedData;
 };
 
+const formatReadableExpirationDate = ({
+  expiration_month,
+  expiration_year,
+}: {
+  expiration_month: number;
+  expiration_year: number;
+}): string => {
+  const formattedMonth = expiration_month.toString().padStart(2, "0");
+  const formattedYear = expiration_year.toString().slice(-2);
+  return `${formattedMonth}/${formattedYear}`;
+};
+
 export {
   formatCardNumber,
   formatExpirationDate,
@@ -162,5 +174,6 @@ export {
   getMaxLength,
   extractStringValue,
   extractCreditCardData,
+  formatReadableExpirationDate,
   FALLBACK_CARD,
 };
