@@ -46,7 +46,6 @@ const cardResponseSchema = z.object({
   fingerprint: z.string(),
   name: z.string().nullable(),
   security_code_check: z.boolean(),
-  created_at: z.string(),
   location: z.string().nullable(),
   deleted: z.boolean().optional(),
   street1: z.string().nullable().optional(),
@@ -66,7 +65,6 @@ const bankResponseSchema = z.object({
   account_number: z.string(),
   account_holder_name: z.string(),
   account_holder_type: z.string(),
-  created: z.string(),
 });
 // Token Response Schema
 const tokenResponseSchema = z.object({
@@ -77,7 +75,6 @@ const tokenResponseSchema = z.object({
   used: z.boolean(),
   card: cardResponseSchema.optional(),
   bank_account: bankResponseSchema.optional(),
-  created_at: z.string(),
   charge_status: z.string(),
 });
 

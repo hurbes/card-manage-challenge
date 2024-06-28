@@ -4,7 +4,6 @@ import { CardNumberVerification } from "card-validator/dist/card-number";
 
 const cardNumberSchema = z
   .string()
-  .max(19)
   .refine(
     (value) => {
       const result = valid.number(value);

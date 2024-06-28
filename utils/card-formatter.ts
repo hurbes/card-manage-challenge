@@ -94,8 +94,12 @@ const getMaxLength = (
   name: keyof CardFormValues,
   card: CardType | null | undefined
 ): number | undefined => {
+  console.log("name", card?.lengths, card?.gaps);
   switch (name) {
     case "cardNumber":
+      if (card?.lengths.length === 1) {
+        return card?.lengths[0] + card?.gaps.length;
+      }
       return card?.lengths[card.lengths.length - 1];
     case "cvv":
       return card?.code.size;

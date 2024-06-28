@@ -41,6 +41,7 @@ export const useAddCard = (): UseAddCardReturn => {
   const {
     isError: isUpdateError,
     error: updateError,
+    isPending: isUpdatePending,
     isSuccess: isUpdateSuccess,
     mutate: updateCustomer,
   } = useUpdateCustomer(customer_id || "");
@@ -68,7 +69,7 @@ export const useAddCard = (): UseAddCardReturn => {
 
   useEffect(() => {
     if (isUpdateError) {
-      alert(`Failed to update customer\n${updateError.message}`);
+      alert(`Failed to update customer\n${updateError.data.message}`);
     }
 
     if (isUpdateSuccess && isTokenSuccess) {
@@ -83,7 +84,7 @@ export const useAddCard = (): UseAddCardReturn => {
     }
   }, [customer_id, createdToken]);
 
-  const isPending = isTokenPending || isUpdateError;
+  const isPending = isTokenPending || isUpdatePending;
 
   const onSubmit: SubmitHandler<CardFormValues> = (data) => {
     const card = extractCreditCardData(data);

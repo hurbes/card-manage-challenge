@@ -29,6 +29,7 @@ const InputField: React.FC<InputFieldProps> = ({
   inputType = "text",
   returnKeyType = "next",
 }) => {
+  console.log("InputFieldProps", maxLength);
   return (
     <View className={cn("gap-3", className)}>
       <Text className='text-lg font-semibold tracking-wide'>{label}</Text>
