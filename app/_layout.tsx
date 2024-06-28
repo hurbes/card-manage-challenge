@@ -11,8 +11,8 @@ export default function RootLayout() {
   return (
     <OmiseConfigProvider
       config={{
-        publicKey: "pkey_test_5wvisbxphp1zapg8ie6",
-        secretKey: "skey_test_5wvisdjjoqmfof5npzw",
+        publicKey: process.env.EXPO_PUBLIC_PUBLIC_TEST_KEY,
+        secretKey: process.env.EXPO_PUBLIC_SECRET_TEST_KEY,
         apiVersion: "2019-05-29",
       }}>
       <StatusBar style='dark' />
