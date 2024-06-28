@@ -2,13 +2,6 @@ import { z } from "zod";
 import valid from "card-validator";
 import { CardNumberVerification } from "card-validator/dist/card-number";
 
-const extractedCreditCardDataSchema = z.object({
-  cardNumber: z.string(),
-  cardType: z.string(),
-  expirationDate: z.string(),
-  cvv: z.string(),
-});
-
 const cardNumberSchema = z
   .string()
   .max(19)
@@ -52,21 +45,14 @@ const cardholderNameSchema = z.string().min(1, {
 });
 
 // Define the complete card schema
-const cardSchema = z.object({
+const cardFormSchema = z.object({
   cardNumber: cardNumberSchema,
   expirationDate: expirationDateSchema,
   cvv: cvvSchema,
   cardholderName: cardholderNameSchema,
 });
 
-type CardFormValues = z.infer<typeof cardSchema>;
-type CreditCardDataSchema = z.infer<typeof extractedCreditCardDataSchema>;
+type CardFormValues = z.infer<typeof cardFormSchema>;
 type CardType = CardNumberVerification["card"];
 
-export {
-  CardFormValues,
-  CardType,
-  CreditCardDataSchema,
-  cardSchema,
-  extractedCreditCardDataSchema,
-};
+export { CardFormValues, CardType, cardFormSchema };

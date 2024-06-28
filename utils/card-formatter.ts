@@ -1,9 +1,6 @@
-import {
-  CardFormValues,
-  CardType,
-  CreditCardDataSchema,
-  extractedCreditCardDataSchema,
-} from "./card-schema";
+import pick from "lodash.pick";
+import { CardFormValues, cardFormSchema, CardType } from "./card-schema";
+import { Card, cardSchema } from "@/omise/utils/validators/tokenValidators";
 
 type Value = string | { value: string };
 type FallBack = { gaps: number[]; lengths: number[]; code: { size: number } };
@@ -119,18 +116,36 @@ const extractStringValue = (value: Value): string => {
   return "";
 };
 
-const extractCreditCardData = (data: CardFormValues): CreditCardDataSchema => {
-  const { cardNumber, expirationDate, cvv } = data;
-  const { card, value } = cardNumber;
+function extractExpirationDate(expirationDate: string): {
+  expiration_month: number;
+  expiration_year: number;
+} {
+  const [month, year] = expirationDate.split("/").map(Number);
 
-  const extractedData = {
-    cardNumber: value,
-    cardType: card?.type,
-    expirationDate,
-    cvv,
+  if (!Number.isInteger(month) || !Number.isInteger(year)) {
+    throw new Error("Invalid expiration date format");
+  }
+
+  return { expiration_month: month, expiration_year: year };
+}
+
+const extractCreditCardData = (data: CardFormValues): Card => {
+  const { cardholderName, cardNumber, expirationDate, cvv } = data;
+  const { value } = cardNumber;
+  const { expiration_month, expiration_year } =
+    extractExpirationDate(expirationDate);
+
+  const extractedData: Card = {
+    number: value,
+    expiration_month,
+    expiration_year,
+    security_code: cvv,
+    name: cardholderName,
+    city: "Bangkok",
+    country: "TH",
   };
 
-  const parsedData = extractedCreditCardDataSchema.parse(extractedData);
+  const parsedData = cardSchema.parse(extractedData);
 
   return parsedData;
 };

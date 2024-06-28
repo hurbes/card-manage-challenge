@@ -1,98 +1,92 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import React, { useCallback, useEffect } from "react";
+import { Text, View, Pressable } from "react-native";
 import { Link } from "expo-router";
-import LottieView from "lottie-react-native";
 import { FlashList } from "@shopify/flash-list";
-
-const styles = StyleSheet.create({
-  shadowContainer: {
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
-    elevation: 10, // This is for Android shadow
-  },
-});
-
-const maskCreditCard = (card: string): string => {
-  const maskedCard = card.replace(/.(?=.{4})/g, "•").match(/.{1,4}/g);
-  if (maskedCard) {
-    return maskedCard.join("  ");
-  }
-  return "";
-};
-
-const data: number[] = [];
+import { useSafeStorage } from "@/hooks/useSafeStorage";
+import { useCreateCustomer } from "@/omise/hooks/useCustomer";
+import { FullPageLoader } from "@/components/fullPageloader";
+import { useFetchAllCards } from "@/omise/hooks/useCard";
+import { CCard } from "@/components/cCard";
 
 const Page: React.FC = () => {
-  if (data.length === 0) {
+  const { isLoading, data, saveValue } = useSafeStorage<string | null>(
+    "customer_id"
+  );
+
+  if (isLoading) {
+    return <FullPageLoader />;
+  }
+
+  if (!data) {
+    return <CreateCustomer saveValue={saveValue} />;
+  }
+
+  return <CardList customerId={data} />;
+};
+
+const CreateCustomer: React.FC<{ saveValue: (value: string) => void }> = ({
+  saveValue,
+}) => {
+  const { data, isPending, error, isSuccess, isError, mutate } =
+    useCreateCustomer();
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      saveValue(data.id);
+    }
+  }, [isSuccess, data]);
+
+  useEffect(() => {
+    if (isError) {
+      alert(`Failed to create customer${error.message}`);
+    }
+  }, [isError]);
+
+  const handleCreateCustomer = useCallback(() => {
+    mutate({
+      data: {
+        email: "test_demo-1@demo.com",
+        description: "Test Customer #1 - John Doe",
+      },
+    });
+  }, [mutate]);
+
+  if (isPending) {
+    return <FullPageLoader />;
+  }
+
+  return (
+    <View className='items-center justify-center h-full gap-4'>
+      <Text className='text-3xl'>No customer data found</Text>
+      <Pressable onPress={handleCreateCustomer}>
+        <Text className='text-lg text-sky-400'>Create a dummy customer</Text>
+      </Pressable>
+    </View>
+  );
+};
+
+const CardList: React.FC<{ customerId: string }> = ({ customerId }) => {
+  const { data, isLoading, isError, error } = useFetchAllCards(customerId);
+
+  if (isLoading) {
+    return <FullPageLoader />;
+  }
+
+  if (isError) {
+    alert(`Failed to fetch customer cards${error.message}`);
+  }
+
+  if (data?.data?.length === 0) {
     return <EmptyState />;
   }
+
   return (
-    <View className='bg-white h-full w-full'>
+    <View className='flex-col bg-white gap-3 h-full w-full'>
       <FlashList
-        renderItem={({ item }) => {
-          return <Card />;
-        }}
-        estimatedItemSize={200}
-        data={data}
+        data={data?.data}
+        estimatedItemSize={300}
+        renderItem={(ccCard) => <CCard card={ccCard.item} />}
       />
-    </View>
-  );
-};
-
-const Card: React.FC = () => {
-  const creditCard = maskCreditCard("1234567890123456");
-  return (
-    <View
-      className='bg-white h-[180px] w-11/12 rounded-[12px] p-4 self-center m-5'
-      style={styles.shadowContainer}>
-      <LottieView
-        autoPlay
-        loop={false}
-        style={{
-          width: "25%",
-          height: "35%",
-        }}
-        source={require("../assets/animations/visa.json")}
-      />
-      <View className='w-10/12'>
-        <Text className='text-xl tracking-[.36rem] text-gray-500 px-4 py-2'>
-          {creditCard}
-        </Text>
-        <CardDetails name='John Doe' expiry='12/25' />
-      </View>
-    </View>
-  );
-};
-
-interface CardDetailsProps {
-  name: string;
-  expiry: string;
-}
-
-const CardDetails: React.FC<CardDetailsProps> = ({ name, expiry }) => {
-  return (
-    <View className='flex-row justify-between px-4'>
-      <DetailsColumn title='Name on Card' value={name} />
-      <DetailsColumn title='Expiry' value={expiry} />
-    </View>
-  );
-};
-
-interface DetailsColumnProps {
-  title: string;
-  value: string;
-}
-
-const DetailsColumn: React.FC<DetailsColumnProps> = ({ title, value }) => {
-  return (
-    <View>
-      <Text className='text-xs text-gray-300 py-3'>{title}</Text>
-      <Text className='text-sm font-semibold'>{value}</Text>
     </View>
   );
 };
@@ -105,7 +99,7 @@ const EmptyState: React.FC = () => {
       <Text className='text-lg text-center'>
         We recommend adding a card{"\n"}for easy payment
       </Text>
-      <Link href='/add-card' className='text-lg font-semibold text-sky-400'>
+      <Link href='/addCard' className='text-lg font-semibold text-sky-400'>
         Add New Card
       </Link>
     </View>

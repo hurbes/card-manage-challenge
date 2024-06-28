@@ -2,9 +2,14 @@
 import { createContext, useContext } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+export const OMISE_SCRIPTS = {
+  primary: "https://cdn.omise.co/omise.js.gz",
+  secondary: "https://cdn2.omise.co/omise.js.gz",
+};
+
 // Define the shape of the API configuration context
 interface APIConfig {
-  apiKey: string;
+  publicKey: string;
   secretKey?: string; // Optional for secret key
   apiVersion: string;
   vaultApiVersion?: string; // Optional for Vault API
